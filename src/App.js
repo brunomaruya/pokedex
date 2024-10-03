@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import logo from "./images/logo.png";
 import logo2 from "./images/logo2.png";
 import Input from "./components/Input";
+import PokemonList from "./components/PokemonList";
 
 function App() {
   const [data, setData] = useState(null);
@@ -34,7 +35,8 @@ function App() {
       <section className="flex justify-center ">
         <div className=" container flex flex-col items-center ">
           <img src={logo2} alt={logo} className="mb-7" />
-          <Input />{" "}
+          <Input />
+          <PokemonList data={data} />
         </div>
       </section>
     </div>
