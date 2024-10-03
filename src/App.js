@@ -2,6 +2,7 @@ import "./index.css";
 import "./App.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import logo from "./images/logo.png";
 
 function App() {
   const [data, setData] = useState(null);
@@ -24,8 +25,10 @@ function App() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
   return (
-    <div>
-      <h1 className="text-red-500 text-3xl">Olá, Tailwind CSS!</h1>
+    <div className="">
+      <header>
+        <img src={logo} alt={logo} />
+      </header>
     </div>
   );
 }
