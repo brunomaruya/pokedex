@@ -25,7 +25,7 @@ function App() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
   return (
-    <div className="">
+    <div className="h-screen bg-backgroundRed">
       <header>
         <img src={logo} alt={logo} />
       </header>
