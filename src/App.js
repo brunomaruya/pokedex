@@ -3,6 +3,7 @@ import "./App.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import logo from "./images/logo.png";
+import logo2 from "./images/logo2.png";
 
 function App() {
   const [data, setData] = useState(null);
@@ -26,9 +27,12 @@ function App() {
   if (error) return <div>Error</div>;
   return (
     <div className="h-screen bg-backgroundRed">
-      <header>
+      <header className="p-5 pb-20">
         <img src={logo} alt={logo} />
       </header>
+      <section className="w-full ">
+        <img className="m-auto " src={logo2} alt={logo} />
+      </section>
     </div>
   );
 }
