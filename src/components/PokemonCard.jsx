@@ -59,9 +59,12 @@ export default function PokemonCard(data) {
             .find((entry) => entry.language.name === "en")
             .flavor_text.replace(/\f/g, "")}
         </div>
+        <button className="bg-buttonRed text-white p-2 rounded-lg mt-auto">
+          Know more
+        </button>
       </div>
 
-      <div className="">
+      <div>
         <span className="float-end">{idFormatter(pokemonData.id)}</span>
         <img
           src={pokemonData.sprites.other["official-artwork"].front_default}
