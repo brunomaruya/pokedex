@@ -25,5 +25,15 @@ export default function PokemonProfile() {
 
   if (error) return <div>Error</div>;
 
-  return <div>PokemonProfile: {id}</div>;
+  return (
+    <main>
+      <section className="container bg-white">
+        <img
+          src={data.sprites.other["official-artwork"].front_default}
+          alt={data.name}
+        />
+        <div></div>
+      </section>
+    </main>
+  );
 }
