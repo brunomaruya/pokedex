@@ -29,7 +29,6 @@ export default function PokemonCard(data) {
       .get(pokemonData.species.url)
       .then((response) => {
         setSpeciesData(response.data);
-        console.log(pokemonData.species.url);
         setLoading(false);
       })
       .catch((error) => {
@@ -47,9 +46,6 @@ export default function PokemonCard(data) {
           {name.charAt(0).toUpperCase() + name.slice(1)}
         </h1>
         <div>
-          {/* {speciesData?.flavor_text_entries[0].flavor_text
-            .replace(/\f/g, "")
-            .replace(/\u000c/g, "")} */}
           {speciesData?.flavor_text_entries
             .find((entry) => entry.language.name === "en")
             .flavor_text.replace(/\f/g, "")}
