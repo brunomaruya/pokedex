@@ -45,7 +45,10 @@ export default function PokemonCard(data) {
         <span className="float-start flex gap-1">
           {pokemonData.types.map((type) => {
             return (
-              <div className="py-1 px-3 text-xs text-white bg-buttonRed  rounded-full">
+              <div
+                key={type.type.name}
+                className="py-1 px-3 text-xs text-white bg-buttonRed  rounded-full"
+              >
                 {type.type.name}
               </div>
             );
