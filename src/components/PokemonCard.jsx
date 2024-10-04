@@ -54,12 +54,12 @@ export default function PokemonCard(data) {
         <h1 className="font-bold text-2xl">
           {name.charAt(0).toUpperCase() + name.slice(1)}
         </h1>
-        <div className="text-sm leading-4">
+        <div className="text-sm leading-4 mb-3">
           {speciesData?.flavor_text_entries
             .find((entry) => entry.language.name === "en")
             .flavor_text.replace(/\f/g, "")}
         </div>
-        <button className="mt-3 hover:brightness-75 bg-buttonRed text-white p-2 rounded-lg mt-auto">
+        <button className=" hover:brightness-75 bg-buttonRed text-white p-2 rounded-lg mt-auto">
           Know more
         </button>
       </div>
