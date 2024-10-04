@@ -41,11 +41,20 @@ export default function PokemonCard(data) {
 
   return (
     <div className="flex justify-between w-full p-5 rounded-lg bg-white ">
-      <div>
+      <div className="flex flex-col gap-1">
+        <span className="float-start flex gap-1">
+          {pokemonData.types.map((type) => {
+            return (
+              <div className="py-1 px-3 text-xs text-white bg-buttonRed  rounded-full">
+                {type.type.name}
+              </div>
+            );
+          })}
+        </span>
         <h1 className="font-bold text-2xl">
           {name.charAt(0).toUpperCase() + name.slice(1)}
         </h1>
-        <div>
+        <div className="text-sm">
           {speciesData?.flavor_text_entries
             .find((entry) => entry.language.name === "en")
             .flavor_text.replace(/\f/g, "")}
