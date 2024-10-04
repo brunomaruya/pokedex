@@ -40,7 +40,7 @@ export default function PokemonCard(data) {
   if (error) return <div>Error</div>;
 
   return (
-    <div className="flex justify-between w-full p-5 rounded-lg bg-white ">
+    <div className="flex justify-between w-full p-5 rounded-lg bg-white shadow-custom-xl">
       <div className="flex flex-col gap-1">
         <span className="float-start flex gap-1">
           {pokemonData.types.map((type) => {
