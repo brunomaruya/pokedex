@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { idFormatter } from "../utils/idFormatter";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 import { ArrowRightIcon, SpeakerWaveIcon } from "@heroicons/react/16/solid";
@@ -46,7 +46,7 @@ export default function PokemonProfile() {
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
 
   if (loading) return <div>Loading...</div>;
 
@@ -119,11 +119,15 @@ export default function PokemonProfile() {
           {evolutionChain.map((pokemon, index) => (
             <React.Fragment key={pokemon.id}>
               <div className="flex flex-col items-center">
-                <img
-                  className="w-20 h-20"
-                  src={pokemon.sprites.other["official-artwork"].front_default}
-                  alt={pokemon.name}
-                />
+                <Link to={`/pokemon/${pokemon.id}`}>
+                  <img
+                    className="w-20 h-20"
+                    src={
+                      pokemon.sprites.other["official-artwork"].front_default
+                    }
+                    alt={pokemon.name}
+                  />
+                </Link>
                 <span className="text-sm text-white">{pokemon.name}</span>
               </div>
               {/* Renderize a seta apenas se não for o último Pokémon */}
