@@ -84,6 +84,16 @@ export default function PokemonProfile() {
           <InfoCard label="Height" value={data.height / 10 + "m"} />
           <InfoCard label="Weight" value={data.weight / 10 + "kg"} />
         </div>
+        {/* STATS  */}
+        <h2 className="text-2xl font-bold">Stats</h2>
+        <div className="grid grid-cols-2 gap-2">
+          {data.stats.map((stat) => (
+            <InfoCard
+              label={capitalizeFirstLetter(stat.stat.name)}
+              value={stat.base_stat}
+            />
+          ))}
+        </div>
       </section>
     </main>
   );
