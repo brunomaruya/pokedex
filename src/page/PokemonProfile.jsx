@@ -27,7 +27,7 @@ export default function PokemonProfile() {
 
   return (
     <main>
-      <section className="container bg-white">
+      <section className="container flex flex-col items-center bg-white rounded-lg shadow-custom-xl">
         <img
           src={data.sprites.other["official-artwork"].front_default}
           alt={data.name}
