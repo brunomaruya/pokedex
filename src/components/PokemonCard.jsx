@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { idFormatter } from "../utils/idFormatter";
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 
 export default function PokemonCard(data) {
   const { name, url } = data.data;
@@ -8,9 +10,6 @@ export default function PokemonCard(data) {
   const [speciesData, setSpeciesData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const idFormatter = (id) => {
-    return "#" + id.toString().padStart(3, "0");
-  };
 
   useEffect(() => {
     axios
@@ -55,9 +54,7 @@ export default function PokemonCard(data) {
             );
           })}
         </span>
-        <h1 className="font-bold text-2xl">
-          {name.charAt(0).toUpperCase() + name.slice(1)}
-        </h1>
+        <h1 className="font-bold text-2xl">{capitalizeFirstLetter(name)}</h1>
         <div className="text-sm leading-4 mb-3">
           {speciesData?.flavor_text_entries
             .find((entry) => entry.language.name === "en")
