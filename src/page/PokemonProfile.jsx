@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { idFormatter } from "../utils/idFormatter";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
-import { SpeakerWaveIcon } from "@heroicons/react/16/solid";
+import { ArrowRightIcon, SpeakerWaveIcon } from "@heroicons/react/16/solid";
 import InfoCard from "../components/InfoCard";
 import {
   getPokemon,
@@ -114,13 +114,26 @@ export default function PokemonProfile() {
       {/* EVOLUTION CHAIN  */}
       <section>
         <h2 className="text-2xl font-bold text-white">Evolution </h2>
-        <div>
-          {/* {evolutionChain.map((pokemon) => (
-            <img
-              src={pokemon.sprites.other["official-artwork"].front_default}
-              alt={pokemon.name}
-            />
-          ))} */}
+
+        <div className="flex justify-between items-center">
+          {evolutionChain.map((pokemon, index) => (
+            <React.Fragment key={pokemon.id}>
+              <div className="flex flex-col items-center">
+                <img
+                  className="w-20 h-20"
+                  src={pokemon.sprites.other["official-artwork"].front_default}
+                  alt={pokemon.name}
+                />
+                <span className="text-sm text-white">{pokemon.name}</span>
+              </div>
+              {/* Renderize a seta apenas se não for o último Pokémon */}
+              {index < evolutionChain.length - 1 && (
+                <span className="mx-2 text-2xl">
+                  <ArrowRightIcon className="h-6 w-6 text-white" />
+                </span> // Aumenta o tamanho da seta
+              )}
+            </React.Fragment>
+          ))}
         </div>
       </section>
     </main>
