@@ -9,19 +9,19 @@ import InfoCard from "../components/InfoCard";
 export default function PokemonProfile() {
   const [data, setData] = useState(null);
   const [speciesData, setSpeciesData] = useState(null);
-  const [evolutionChain, setEvolutionChain] = useState(null);
+  const [evolutionChain, setEvolutionChain] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
 
-  const extractEvolutionNames = (chain) => {
+  const extractEvolutionDatas = (chain) => {
     if (!chain) return;
-    const evolutionNames = [];
+    const evolutionDatas = [];
     while (chain) {
-      evolutionNames.push(chain.species.name);
+      evolutionDatas.push(chain.species.url);
       chain = chain.evolves_to[0];
     }
-    return evolutionNames;
+    return evolutionDatas;
   };
 
   useEffect(() => {
@@ -56,9 +56,21 @@ export default function PokemonProfile() {
     axios
       .get(speciesData.evolution_chain.url)
       .then((response) => {
-        // console.log(speciesData.evolution_chain.url);
+        console.log(speciesData.evolution_chain.url);
         console.log(response.data.chain);
-        setEvolutionChain(response.data.chain);
+
+        extractEvolutionDatas(response.data.chain).map((url) => {
+          try {
+            axios.get(url).then((response) => {
+              console.log(response.data);
+              console.log(url);
+              setEvolutionChain((pokemon) => [...pokemon, response.data]);
+            });
+          } catch (error) {
+            console.log(error);
+          }
+        });
+
         setLoading(false);
       })
       .catch((error) => {
@@ -132,7 +144,14 @@ export default function PokemonProfile() {
       {/* EVOLUTION CHAIN  */}
       <section>
         <h2 className="text-2xl font-bold text-white">Evolution </h2>
-        <div>{extractEvolutionNames(evolutionChain).join(" -> ")}</div>
+        <div>
+          {/* {evolutionChain.map((pokemon) => (
+            <img
+              src={pokemon.sprites.other["official-artwork"].front_default}
+              alt={pokemon.name}
+            />
+          ))} */}
+        </div>
       </section>
     </main>
   );
