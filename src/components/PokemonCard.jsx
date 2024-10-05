@@ -60,7 +60,7 @@ export default function PokemonCard(data) {
             .find((entry) => entry.language.name === "en")
             .flavor_text.replace(/\f/g, "")}
         </div>
-        <Link to={`/pokemon/${pokemonData.id}`}>
+        <Link to={`/pokemon/${pokemonData.id} `} className="mt-auto">
           <button className=" hover:brightness-75 bg-buttonRed text-white p-2 rounded-lg mt-auto">
             Know more
           </button>
