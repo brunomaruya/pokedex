@@ -5,10 +5,11 @@ import { idFormatter } from "../utils/idFormatter";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 import { SpeakerWaveIcon } from "@heroicons/react/16/solid";
 import InfoCard from "../components/InfoCard";
+import { getPokemon, getPokemonSpecies } from "../services/pokemonServices";
 
 export default function PokemonProfile() {
-  const [data, setData] = useState(null);
-  const [speciesData, setSpeciesData] = useState(null);
+  const [pokemon, setPokemon] = useState(null);
+  const [species, setSpecies] = useState(null);
   const [evolutionChain, setEvolutionChain] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,38 +26,28 @@ export default function PokemonProfile() {
   };
 
   useEffect(() => {
-    axios
-      .get(`https://pokeapi.co/api/v2/pokemon/${id}`)
-      .then((response) => {
-        // console.log(response.data);
-        setData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const pokemonData = await getPokemon(id);
+        const speciesData = await getPokemonSpecies(id);
+        setPokemon(pokemonData);
+        setSpecies(speciesData);
+      } catch (error) {
         setError(error);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+    fetchData();
   }, []);
-  useEffect(() => {
-    if (!data) return;
-    axios
-      .get(data.species.url)
-      .then((response) => {
-        // console.log(response.data);
-        setSpeciesData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-      });
-  }, [data]);
 
   useEffect(() => {
-    if (!speciesData) return;
+    if (!species) return;
     axios
-      .get(speciesData.evolution_chain.url)
+      .get(species.evolution_chain.url)
       .then((response) => {
-        console.log(speciesData.evolution_chain.url);
+        console.log(species.evolution_chain.url);
         console.log(response.data.chain);
 
         extractEvolutionDatas(response.data.chain).map((url) => {
@@ -76,7 +67,7 @@ export default function PokemonProfile() {
       .catch((error) => {
         setError(error);
       });
-  }, [speciesData]);
+  }, [species]);
 
   if (loading) return <div>Loading...</div>;
 
@@ -87,22 +78,22 @@ export default function PokemonProfile() {
       <section className="container flex flex-col p-5 bg-white rounded-lg shadow-custom-xl">
         {/* IMAGE */}
         <img
-          src={data.sprites.other["official-artwork"].front_default}
-          alt={data.name}
+          src={pokemon.sprites.other["official-artwork"].front_default}
+          alt={pokemon.name}
         />
         {/* HEADER */}
         <div className="flex justify-between w-full ">
-          <div>{idFormatter(data.id)}</div>
+          <div>{idFormatter(pokemon.id)}</div>
           <div>
             <SpeakerWaveIcon className="w-6 h-6" />
           </div>
         </div>
         <h1 className="text-3xl font-bold">
-          {capitalizeFirstLetter(data.name)}
+          {capitalizeFirstLetter(pokemon.name)}
         </h1>
         {/* TYPES  */}
         <div className="float-start flex gap-1">
-          {data.types.map((type) => {
+          {pokemon.types.map((type) => {
             return (
               <div
                 key={type.type.name}
@@ -115,18 +106,18 @@ export default function PokemonProfile() {
         </div>
         {/* DESCRIPTION  */}
         <div>
-          {speciesData?.flavor_text_entries
+          {species?.flavor_text_entries
             .find((entry) => entry.language.name === "en")
             .flavor_text.replace(/\f/g, "")}
         </div>
         <div className="flex gap-2">
-          <InfoCard label="Height" value={data.height / 10 + "m"} />
-          <InfoCard label="Weight" value={data.weight / 10 + "kg"} />
+          <InfoCard label="Height" value={pokemon.height / 10 + "m"} />
+          <InfoCard label="Weight" value={pokemon.weight / 10 + "kg"} />
         </div>
         {/* STATS  */}
         <h2 className="text-2xl font-bold">Stats</h2>
         <div className="grid grid-cols-2 gap-2">
-          {data.stats.map((stat) => (
+          {pokemon.stats.map((stat) => (
             <InfoCard
               label={capitalizeFirstLetter(stat.stat.name)}
               value={stat.base_stat}
@@ -136,7 +127,7 @@ export default function PokemonProfile() {
         {/* ABILITIES  */}
         <h2 className="text-2xl font-bold">Abilities</h2>
         <div className="grid grid-cols-2 gap-2">
-          {data.abilities.map((ability) => (
+          {pokemon.abilities.map((ability) => (
             <InfoCard label={capitalizeFirstLetter(ability.ability.name)} />
           ))}
         </div>
