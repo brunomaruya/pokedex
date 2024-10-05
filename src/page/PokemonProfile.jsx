@@ -7,6 +7,7 @@ import { SpeakerWaveIcon } from "@heroicons/react/16/solid";
 
 export default function PokemonProfile() {
   const [data, setData] = useState(null);
+  const [speciesData, setSpeciesData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
@@ -24,6 +25,19 @@ export default function PokemonProfile() {
         setLoading(false);
       });
   }, []);
+  useEffect(() => {
+    if (!data) return;
+    axios
+      .get(data.species.url)
+      .then((response) => {
+        setSpeciesData(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  }, [data]);
+
   if (loading) return <div>Loading...</div>;
 
   if (error) return <div>Error</div>;
@@ -47,7 +61,6 @@ export default function PokemonProfile() {
           {capitalizeFirstLetter(data.name)}
         </h1>
         {/* TYPES  */}
-
         <div className="float-start flex gap-1">
           {data.types.map((type) => {
             return (
@@ -59,6 +72,12 @@ export default function PokemonProfile() {
               </div>
             );
           })}
+        </div>
+        {/* DESCRIPTION  */}
+        <div>
+          {speciesData?.flavor_text_entries
+            .find((entry) => entry.language.name === "en")
+            .flavor_text.replace(/\f/g, "")}
         </div>
       </section>
     </main>
