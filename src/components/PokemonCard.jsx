@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function PokemonCard(data) {
   const { name, url } = data.data;
@@ -62,9 +63,11 @@ export default function PokemonCard(data) {
             .find((entry) => entry.language.name === "en")
             .flavor_text.replace(/\f/g, "")}
         </div>
-        <button className=" hover:brightness-75 bg-buttonRed text-white p-2 rounded-lg mt-auto">
-          Know more
-        </button>
+        <Link to={`/pokemon/${pokemonData.id}`}>
+          <button className=" hover:brightness-75 bg-buttonRed text-white p-2 rounded-lg mt-auto">
+            Know more
+          </button>
+        </Link>
       </div>
 
       <div>
