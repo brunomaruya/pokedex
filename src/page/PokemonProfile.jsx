@@ -9,15 +9,26 @@ import InfoCard from "../components/InfoCard";
 export default function PokemonProfile() {
   const [data, setData] = useState(null);
   const [speciesData, setSpeciesData] = useState(null);
+  const [evolutionChain, setEvolutionChain] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
+
+  const extractEvolutionNames = (chain) => {
+    if (!chain) return;
+    const evolutionNames = [];
+    while (chain) {
+      evolutionNames.push(chain.species.name);
+      chain = chain.evolves_to[0];
+    }
+    return evolutionNames;
+  };
 
   useEffect(() => {
     axios
       .get(`https://pokeapi.co/api/v2/pokemon/${id}`)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setData(response.data);
         setLoading(false);
       })
@@ -31,6 +42,7 @@ export default function PokemonProfile() {
     axios
       .get(data.species.url)
       .then((response) => {
+        // console.log(response.data);
         setSpeciesData(response.data);
         setLoading(false);
       })
@@ -39,12 +51,27 @@ export default function PokemonProfile() {
       });
   }, [data]);
 
+  useEffect(() => {
+    if (!speciesData) return;
+    axios
+      .get(speciesData.evolution_chain.url)
+      .then((response) => {
+        // console.log(speciesData.evolution_chain.url);
+        console.log(response.data.chain);
+        setEvolutionChain(response.data.chain);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  }, [speciesData]);
+
   if (loading) return <div>Loading...</div>;
 
   if (error) return <div>Error</div>;
 
   return (
-    <main>
+    <main className="mb-20">
       <section className="container flex flex-col p-5 bg-white rounded-lg shadow-custom-xl">
         {/* IMAGE */}
         <img
@@ -101,6 +128,11 @@ export default function PokemonProfile() {
             <InfoCard label={capitalizeFirstLetter(ability.ability.name)} />
           ))}
         </div>
+      </section>
+      {/* EVOLUTION CHAIN  */}
+      <section>
+        <h2 className="text-2xl font-bold text-white">Evolution </h2>
+        <div>{extractEvolutionNames(evolutionChain).join(" -> ")}</div>
       </section>
     </main>
   );
