@@ -61,7 +61,7 @@ export default function PokemonProfile() {
           alt={pokemon.name}
         />
         {/* HEADER */}
-        <div>
+        <div className="flex flex-col">
           <div className="flex justify-between w-full ">
             <div>{idFormatter(pokemon.id)}</div>
             <div>
