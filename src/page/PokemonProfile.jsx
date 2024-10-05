@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { idFormatter } from "../utils/idFormatter";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 import { SpeakerWaveIcon } from "@heroicons/react/16/solid";
+import InfoCard from "../components/InfoCard";
 
 export default function PokemonProfile() {
   const [data, setData] = useState(null);
@@ -78,6 +79,10 @@ export default function PokemonProfile() {
           {speciesData?.flavor_text_entries
             .find((entry) => entry.language.name === "en")
             .flavor_text.replace(/\f/g, "")}
+        </div>
+        <div className="flex gap-2">
+          <InfoCard label="Height" value={data.height / 10 + "m"} />
+          <InfoCard label="Weight" value={data.weight / 10 + "kg"} />
         </div>
       </section>
     </main>
