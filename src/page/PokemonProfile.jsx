@@ -5,7 +5,11 @@ import { idFormatter } from "../utils/idFormatter";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 import { SpeakerWaveIcon } from "@heroicons/react/16/solid";
 import InfoCard from "../components/InfoCard";
-import { getPokemon, getPokemonSpecies } from "../services/pokemonServices";
+import {
+  getPokemon,
+  getPokemonEvolutionChain,
+  getPokemonSpecies,
+} from "../services/pokemonServices";
 
 export default function PokemonProfile() {
   const [pokemon, setPokemon] = useState(null);
@@ -19,7 +23,7 @@ export default function PokemonProfile() {
     if (!chain) return;
     const evolutionDatas = [];
     while (chain) {
-      evolutionDatas.push(chain.species.url);
+      evolutionDatas.push(chain.species.name);
       chain = chain.evolves_to[0];
     }
     return evolutionDatas;
@@ -31,8 +35,10 @@ export default function PokemonProfile() {
       try {
         const pokemonData = await getPokemon(id);
         const speciesData = await getPokemonSpecies(id);
+        const evolutionDatas = await getPokemonEvolutionChain(id);
         setPokemon(pokemonData);
         setSpecies(speciesData);
+        setEvolutionChain(evolutionDatas);
       } catch (error) {
         setError(error);
       } finally {
@@ -41,33 +47,6 @@ export default function PokemonProfile() {
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    if (!species) return;
-    axios
-      .get(species.evolution_chain.url)
-      .then((response) => {
-        console.log(species.evolution_chain.url);
-        console.log(response.data.chain);
-
-        extractEvolutionDatas(response.data.chain).map((url) => {
-          try {
-            axios.get(url).then((response) => {
-              console.log(response.data);
-              console.log(url);
-              setEvolutionChain((pokemon) => [...pokemon, response.data]);
-            });
-          } catch (error) {
-            console.log(error);
-          }
-        });
-
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-      });
-  }, [species]);
 
   if (loading) return <div>Loading...</div>;
 
