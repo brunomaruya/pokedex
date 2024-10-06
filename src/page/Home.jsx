@@ -1,20 +1,28 @@
 import React from "react";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import logo2 from "../images/logo2.png";
 
 import PokemonList from "../components/PokemonList";
 import Input from "../components/Input";
-import { getPokemons } from "../services/pokemonServices";
+import { getAllPokemons, getPokemonsByPage } from "../services/pokemonServices";
 
 export default function Home() {
   const [pokemons, setPokemons] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
-    getPokemons(setPokemons, setLoading, setError);
-  }, []);
+    getPokemonsByPage(
+      setPokemons,
+      setLoading,
+      setError,
+      currentPage,
+      setTotalPages
+    );
+    console.log(currentPage);
+  }, [currentPage]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
@@ -25,6 +33,26 @@ export default function Home() {
           <img src={logo2} alt={logo2} className="mb-7" />
           <Input />
           <PokemonList data={pokemons} />
+          <div>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <span>
+              {" "}
+              Page {currentPage} of {totalPages}{" "}
+            </span>
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </div>
         </div>
       </section>
     </div>

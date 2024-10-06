@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
-export const getPokemons = async (setPokemons, setLoading, setError) => {
+export const getAllPokemons = async (setPokemons, setLoading, setError) => {
   try {
     const limit = 100;
     let allPokemons = [];
@@ -25,6 +25,30 @@ export const getPokemons = async (setPokemons, setLoading, setError) => {
     setError(error);
     setLoading(false);
     throw error; // Opcional: você pode lançar o erro para tratá-lo em outro lugar
+  }
+};
+
+export const getPokemonsByPage = async (
+  setPokemons,
+  setLoading,
+  setError,
+  currentPage,
+  setTotalPages
+) => {
+  const limit = 24;
+  setLoading(true);
+  try {
+    const offset = (currentPage - 1) * limit;
+    const response = await axiosInstance.get(
+      `pokemon?limit=${limit}&offset=${offset}`
+    );
+    console.log(response.data.results);
+    setPokemons(response.data.results);
+    setTotalPages(Math.ceil(response.data.count / limit)); // Define o total de páginas
+  } catch (error) {
+    setError(error);
+  } finally {
+    setLoading(false);
   }
 };
 
