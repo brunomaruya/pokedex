@@ -3,38 +3,35 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { idFormatter } from "../utils/idFormatter";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
+import { getPokemon, getPokemonSpecies } from "../services/pokemonServices";
 
 export default function PokemonCard(data) {
-  const { name, url } = data.data;
+  const pokemonName = data.pokemons;
   const [pokemonData, setPokemonData] = useState(null);
   const [speciesData, setSpeciesData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get(url)
-      .then((response) => {
-        setPokemonData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const pokemonData = await getPokemon(pokemonName);
+        const speciesData = await getPokemonSpecies(pokemonName.split("-")[0]);
+        setPokemonData(pokemonData);
+        setSpeciesData(speciesData);
+      } catch (error) {
         setError(error);
-      });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
-    if (!pokemonData) return;
-    axios
-      .get(pokemonData.species.url)
-      .then((response) => {
-        setSpeciesData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-      });
-  }, [pokemonData]);
+    // console.log(pokemonData, speciesData);
+  }, [pokemonData, speciesData]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
@@ -54,7 +51,9 @@ export default function PokemonCard(data) {
             );
           })}
         </span>
-        <h1 className="font-bold text-2xl">{capitalizeFirstLetter(name)}</h1>
+        <h1 className="font-bold text-2xl">
+          {capitalizeFirstLetter(pokemonName)}
+        </h1>
         <div className="text-sm leading-4 mb-3">
           {speciesData?.flavor_text_entries
             .find((entry) => entry.language.name === "en")
@@ -71,7 +70,7 @@ export default function PokemonCard(data) {
         <span className="float-end">{idFormatter(pokemonData.id)}</span>
         <img
           src={pokemonData.sprites.other["official-artwork"].front_default}
-          alt={name}
+          alt={pokemonName}
           className=""
         />
       </div>

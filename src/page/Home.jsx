@@ -5,23 +5,15 @@ import logo2 from "../images/logo2.png";
 
 import PokemonList from "../components/PokemonList";
 import Input from "../components/Input";
+import { getPokemons } from "../services/pokemonServices";
 
 export default function Home() {
-  const [data, setData] = useState(null);
+  const [pokemons, setPokemons] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("https://pokeapi.co/api/v2/pokemon/")
-      .then((response) => {
-        setData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-        setLoading(false);
-      });
+    getPokemons(setPokemons, setLoading, setError);
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -32,7 +24,7 @@ export default function Home() {
         <div className=" container flex flex-col items-center ">
           <img src={logo2} alt={logo2} className="mb-7" />
           <Input />
-          <PokemonList data={data} />
+          <PokemonList data={pokemons} />
         </div>
       </section>
     </div>

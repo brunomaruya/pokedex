@@ -1,12 +1,30 @@
 import axiosInstance from "./axiosInstance";
 
-export const getPokemons = async () => {
+export const getPokemons = async (setPokemons, setLoading, setError) => {
   try {
-    const response = await axiosInstance.get("pokemon");
-    return response.data;
+    const limit = 100;
+    let allPokemons = [];
+    let offset = 0;
+    let fetching = true;
+
+    while (fetching) {
+      const response = await axiosInstance.get(
+        `pokemon?limit=${limit}&offset=${offset}`
+      );
+      allPokemons = allPokemons.concat(response.data.results);
+      if (response.data.results.length < limit) {
+        fetching = false; // Não há mais Pokémon para buscar
+      }
+      offset += limit; // Aumenta o offset para a próxima página
+    }
+
+    setPokemons(allPokemons); // Atualiza o estado com todos os Pokémon
+    setLoading(false);
   } catch (error) {
-    console.error(error);
-    throw error;
+    console.error("Error fetching Pokémon:", error);
+    setError(error);
+    setLoading(false);
+    throw error; // Opcional: você pode lançar o erro para tratá-lo em outro lugar
   }
 };
 
