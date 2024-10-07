@@ -6,12 +6,13 @@ import PokemonList from "../components/PokemonList";
 import Input from "../components/Input";
 import { getAllPokemons, getPokemonsByPage } from "../services/pokemonServices";
 import Pagination from "../components/Pagination";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function Home() {
   const [pokemons, setPokemons] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useLocalStorage("page", 1);
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
