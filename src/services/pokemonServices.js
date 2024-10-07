@@ -35,7 +35,7 @@ export const getPokemonsByPage = async (
   currentPage,
   setTotalPages
 ) => {
-  const limit = 24;
+  const limit = 48;
   setLoading(true);
   try {
     const offset = (currentPage - 1) * limit;

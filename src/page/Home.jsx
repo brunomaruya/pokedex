@@ -5,6 +5,7 @@ import logo2 from "../images/logo2.png";
 import PokemonList from "../components/PokemonList";
 import Input from "../components/Input";
 import { getAllPokemons, getPokemonsByPage } from "../services/pokemonServices";
+import Pagination from "../components/Pagination";
 
 export default function Home() {
   const [pokemons, setPokemons] = useState(null);
@@ -21,7 +22,6 @@ export default function Home() {
       currentPage,
       setTotalPages
     );
-    console.log(currentPage);
   }, [currentPage]);
 
   if (loading) return <div>Loading...</div>;
@@ -33,26 +33,11 @@ export default function Home() {
           <img src={logo2} alt={logo2} className="mb-7" />
           <Input />
           <PokemonList data={pokemons} />
-          <div>
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <span>
-              {" "}
-              Page {currentPage} of {totalPages}{" "}
-            </span>
-            <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
+          <Pagination
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+            totalPages={totalPages}
+          />
         </div>
       </section>
     </div>
