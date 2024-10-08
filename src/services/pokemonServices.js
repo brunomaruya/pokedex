@@ -28,24 +28,65 @@ export const getAllPokemons = async (setPokemons, setLoading, setError) => {
   }
 };
 
+// export const getPokemonsByPage = async (
+//   setPokemons,
+//   setLoading,
+//   setError,
+//   currentPage,
+//   setTotalPages,
+//   filteredData
+// ) => {
+//   const limit = 48;
+//   setLoading(true);
+//   try {
+//     const offset = (currentPage - 1) * limit;
+//     const response = await axiosInstance.get(
+//       `pokemon?limit=${limit}&offset=${offset}`
+//     );
+
+//     setPokemons(response.data.results);
+//     setTotalPages(Math.ceil(response.data.count / limit)); // Define o total de páginas
+//   } catch (error) {
+//     setError(error);
+//   } finally {
+//     setLoading(false);
+//   }
+// };
+
 export const getPokemonsByPage = async (
+  allPokemons,
+  currentPage,
+  setPokemonsByPage
+) => {
+  // allPokemons = [{},{},...] contem mais de 1000 pokemons
+  console.log(allPokemons);
+  try {
+    if (allPokemons) {
+      const itemsPerPage = 48;
+      const indexOfLastItem = currentPage * itemsPerPage; //ex: 1 * 48 = 48; ex: 2 * 48 = 96
+      const indexOfFirstItem = indexOfLastItem - itemsPerPage; //ex: 48 - 48 = 0; ex: 96 - 48 = 48
+      const currentItems = allPokemons.slice(indexOfLastItem, indexOfFirstItem);
+      setPokemonsByPage(currentItems);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getPokemonsBySearchTerm = async (
+  searchTerm,
   setPokemons,
   setLoading,
-  setError,
-  currentPage,
-  setTotalPages
+  setError
 ) => {
-  const limit = 48;
   setLoading(true);
   try {
-    const offset = (currentPage - 1) * limit;
     const response = await axiosInstance.get(
-      `pokemon?limit=${limit}&offset=${offset}`
+      `pokemon/${searchTerm.toLowerCase()}`
     );
-    console.log(response.data.results);
-    setPokemons(response.data.results);
-    setTotalPages(Math.ceil(response.data.count / limit)); // Define o total de páginas
+    setPokemons([response.data]); // Setamos apenas o Pokémon que foi encontrado
   } catch (error) {
+    console.error("Error fetching Pokémon by search:", error);
     setError(error);
   } finally {
     setLoading(false);
