@@ -28,8 +28,13 @@ export default function Home() {
     getAllPokemons(setAllPokemons, setLoading, setError);
   }, []);
   useEffect(() => {
-    getPokemonsByPage(allPokemons, currentPage, setPokemonsByPage);
-  }, [allPokemons]);
+    getPokemonsByPage(
+      allPokemons,
+      currentPage,
+      setPokemonsByPage,
+      setTotalPages
+    );
+  }, [allPokemons, currentPage]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
@@ -40,7 +45,7 @@ export default function Home() {
           <img src={logo2} alt={logo2} className="mb-7" />
           <Input data={pokemons} />
 
-          {/* <PokemonList data={pokemonsByPage} /> */}
+          <PokemonList data={pokemonsByPage} />
           <Pagination
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}

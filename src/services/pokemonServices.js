@@ -31,7 +31,8 @@ export const getAllPokemons = async (setPokemons, setLoading, setError) => {
 export const getPokemonsByPage = async (
   allPokemons,
   currentPage,
-  setPokemonsByPage
+  setPokemonsByPage,
+  setTotalPages
 ) => {
   if (!allPokemons) return;
 
@@ -41,7 +42,8 @@ export const getPokemonsByPage = async (
       const indexOfLastItem = currentPage * itemsPerPage; //ex: 1 * 48 = 48; ex: 2 * 48 = 96
       const indexOfFirstItem = indexOfLastItem - itemsPerPage; //ex: 48 - 48 = 0; ex: 96 - 48 = 48
       const currentItems = allPokemons.slice(indexOfFirstItem, indexOfLastItem);
-
+      const totalPages = Math.ceil(allPokemons.length / itemsPerPage);
+      setTotalPages(totalPages);
       setPokemonsByPage(currentItems);
     }
   } catch (error) {
