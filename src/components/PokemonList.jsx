@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import PokemonCard from "./PokemonCard";
 
 export default function PokemonList(pokemons) {
-  if (!pokemons) return <div>No results</div>;
+  if (!pokemons.data) return <div>No results</div>;
 
   console.log(pokemons);
   return (
