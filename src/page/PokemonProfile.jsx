@@ -19,16 +19,6 @@ export default function PokemonProfile() {
   const [error, setError] = useState(null);
   const { id } = useParams();
 
-  const extractEvolutionDatas = (chain) => {
-    if (!chain) return;
-    const evolutionDatas = [];
-    while (chain) {
-      evolutionDatas.push(chain.species.name);
-      chain = chain.evolves_to[0];
-    }
-    return evolutionDatas;
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -97,8 +87,9 @@ export default function PokemonProfile() {
           {/* STATS  */}
           <h2 className="text-2xl font-bold">Stats</h2>
           <div className="grid grid-cols-2 gap-2">
-            {pokemon.stats.map((stat) => (
+            {pokemon.stats.map((stat, index) => (
               <InfoCard
+                key={index}
                 label={capitalizeFirstLetter(stat.stat.name)}
                 value={stat.base_stat}
               />
@@ -107,8 +98,11 @@ export default function PokemonProfile() {
           {/* ABILITIES  */}
           <h2 className="text-2xl font-bold">Abilities</h2>
           <div className="grid grid-cols-2 gap-2">
-            {pokemon.abilities.map((ability) => (
-              <InfoCard label={capitalizeFirstLetter(ability.ability.name)} />
+            {pokemon.abilities.map((ability, index) => (
+              <InfoCard
+                key={index}
+                label={capitalizeFirstLetter(ability.ability.name)}
+              />
             ))}
           </div>
         </div>

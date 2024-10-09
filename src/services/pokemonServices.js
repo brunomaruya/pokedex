@@ -98,10 +98,10 @@ const extractEvolutionNames = (chain) => {
   return evolutionName;
 };
 
-export const getPokemonEvolutionChain = async (id) => {
-  console.log(id);
+export const getPokemonEvolutionChain = async (name) => {
+  const newName = name.split("-")[0];
   try {
-    const response = await axiosInstance.get(`pokemon-species/${id}`);
+    const response = await axiosInstance.get(`pokemon-species/${newName}`);
     const evolutionChainUrl = response.data.evolution_chain.url;
     const evolutionChainResponse = await axiosInstance.get(evolutionChainUrl);
     const names = extractEvolutionNames(evolutionChainResponse.data.chain);
