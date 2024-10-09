@@ -52,22 +52,19 @@ export const getPokemonsByPage = async (
 };
 
 export const getPokemonsBySearchTerm = async (
+  allPokemons,
   searchTerm,
-  setPokemons,
-  setLoading,
-  setError
+  setPokemonsBySearchTerm
 ) => {
-  setLoading(true);
+  if (!allPokemons) return;
   try {
-    const response = await axiosInstance.get(
-      `pokemon/${searchTerm.toLowerCase()}`
+    const filteredPokemons = allPokemons.filter((pokemon) =>
+      pokemon.name.includes(searchTerm)
     );
-    setPokemons([response.data]); // Setamos apenas o Pokémon que foi encontrado
+    console.log("filtered pokemons", filteredPokemons);
+    setPokemonsBySearchTerm(filteredPokemons);
   } catch (error) {
-    console.error("Error fetching Pokémon by search:", error);
-    setError(error);
-  } finally {
-    setLoading(false);
+    console.error("Error fetching pokemons by search term:", error);
   }
 };
 
@@ -80,9 +77,10 @@ export const getPokemon = async (id) => {
     throw error;
   }
 };
-export const getPokemonSpecies = async (id) => {
+export const getPokemonSpecies = async (name) => {
+  const newName = name.split("-")[0];
   try {
-    const response = await axiosInstance.get(`pokemon-species/${id}`);
+    const response = await axiosInstance.get(`pokemon-species/${newName}`);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar espécies:", error);

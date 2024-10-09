@@ -17,7 +17,7 @@ export default function PokemonCard(data) {
       setLoading(true);
       try {
         const pokemonData = await getPokemon(pokemonName);
-        const speciesData = await getPokemonSpecies(pokemonData.id);
+        const speciesData = await getPokemonSpecies(pokemonData.name);
         setPokemonData(pokemonData);
         setSpeciesData(speciesData);
       } catch (error) {

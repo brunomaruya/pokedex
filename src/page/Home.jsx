@@ -17,6 +17,7 @@ export default function Home() {
   const [pokemons, setPokemons] = useState(null);
   const [allPokemons, setAllPokemons] = useState(null);
   const [pokemonsByPage, setPokemonsByPage] = useState(null);
+  const [pokemonsBySearchTerm, setPokemonsBySearchTerm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useLocalStorage("page", 1);
@@ -27,14 +28,29 @@ export default function Home() {
   useEffect(() => {
     getAllPokemons(setAllPokemons, setLoading, setError);
   }, []);
+
   useEffect(() => {
-    getPokemonsByPage(
-      allPokemons,
-      currentPage,
-      setPokemonsByPage,
-      setTotalPages
-    );
-  }, [allPokemons, currentPage]);
+    if (searchTerm) {
+      console.log("search term", searchTerm);
+      getPokemonsBySearchTerm(allPokemons, searchTerm, setPokemonsBySearchTerm);
+      getPokemonsByPage(
+        pokemonsBySearchTerm,
+        currentPage,
+        setPokemonsByPage,
+        setTotalPages
+      );
+    } else {
+      console.log("no search term");
+      getPokemonsByPage(
+        allPokemons,
+        currentPage,
+        setPokemonsByPage,
+        setTotalPages
+      );
+    }
+  }, [allPokemons, currentPage, searchTerm]);
+
+  useEffect(() => {}, [searchTerm]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
@@ -44,7 +60,6 @@ export default function Home() {
         <div className=" container flex flex-col items-center ">
           <img src={logo2} alt={logo2} className="mb-7" />
           <Input data={pokemons} />
-
           <PokemonList data={pokemonsByPage} />
           <Pagination
             setCurrentPage={setCurrentPage}
