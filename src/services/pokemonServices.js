@@ -21,55 +21,31 @@ export const getAllPokemons = async (setPokemons, setLoading, setError) => {
     setPokemons(allPokemons); // Atualiza o estado com todos os Pokémon
     setLoading(false);
   } catch (error) {
-    console.error("Error fetching Pokémon:", error);
+    console.error("Error fetching all pokemons:", error);
     setError(error);
     setLoading(false);
     throw error; // Opcional: você pode lançar o erro para tratá-lo em outro lugar
   }
 };
 
-// export const getPokemonsByPage = async (
-//   setPokemons,
-//   setLoading,
-//   setError,
-//   currentPage,
-//   setTotalPages,
-//   filteredData
-// ) => {
-//   const limit = 48;
-//   setLoading(true);
-//   try {
-//     const offset = (currentPage - 1) * limit;
-//     const response = await axiosInstance.get(
-//       `pokemon?limit=${limit}&offset=${offset}`
-//     );
-
-//     setPokemons(response.data.results);
-//     setTotalPages(Math.ceil(response.data.count / limit)); // Define o total de páginas
-//   } catch (error) {
-//     setError(error);
-//   } finally {
-//     setLoading(false);
-//   }
-// };
-
 export const getPokemonsByPage = async (
   allPokemons,
   currentPage,
   setPokemonsByPage
 ) => {
-  // allPokemons = [{},{},...] contem mais de 1000 pokemons
-  console.log(allPokemons);
+  if (!allPokemons) return;
+
   try {
     if (allPokemons) {
       const itemsPerPage = 48;
       const indexOfLastItem = currentPage * itemsPerPage; //ex: 1 * 48 = 48; ex: 2 * 48 = 96
       const indexOfFirstItem = indexOfLastItem - itemsPerPage; //ex: 48 - 48 = 0; ex: 96 - 48 = 48
-      const currentItems = allPokemons.slice(indexOfLastItem, indexOfFirstItem);
+      const currentItems = allPokemons.slice(indexOfFirstItem, indexOfLastItem);
+
       setPokemonsByPage(currentItems);
     }
   } catch (error) {
-    console.log(error);
+    console.log("Error fetching pokemons by page: " + error.message);
   }
 };
 

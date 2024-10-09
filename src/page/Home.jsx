@@ -25,28 +25,11 @@ export default function Home() {
     useContext(SearchContext);
 
   useEffect(() => {
-    // if (searchTerm) {
-    //   // Se houver um termo de busca, filtramos localmente
-    //   const filteredData = pokemons?.filter((item) =>
-    //     item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    //   );
-    //   console.log(filteredData);
-    //   setFilteredData(filteredData);
-    // } else {
-    //   // Caso contrário, buscamos a página normalmente
-    //   getPokemonsByPage(
-    //     setPokemons,
-    //     setLoading,
-    //     setError,
-    //     currentPage,
-    //     setTotalPages,
-    //     filteredData
-    //   );
-    // }
-
     getAllPokemons(setAllPokemons, setLoading, setError);
-    getPokemonsByPage(allPokemons, currentPage, setPokemonsByPage);
   }, []);
+  useEffect(() => {
+    getPokemonsByPage(allPokemons, currentPage, setPokemonsByPage);
+  }, [allPokemons]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
@@ -56,7 +39,8 @@ export default function Home() {
         <div className=" container flex flex-col items-center ">
           <img src={logo2} alt={logo2} className="mb-7" />
           <Input data={pokemons} />
-          <PokemonList data={allPokemons} />
+
+          {/* <PokemonList data={pokemonsByPage} /> */}
           <Pagination
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
