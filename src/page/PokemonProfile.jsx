@@ -39,7 +39,8 @@ export default function PokemonProfile() {
       if (!pokemon) return;
       const speciesData = await getPokemonSpecies(pokemon.species.url);
       const evolutionDatas = await getPokemonEvolutionChain(
-        pokemon.species.url
+        pokemon.species.url,
+        pokemon.name
       );
       setEvolutionChain(evolutionDatas);
       setSpecies(speciesData);
@@ -55,10 +56,19 @@ export default function PokemonProfile() {
     <main className="container max-w-[1024px] mx-auto mb-20">
       <section className="container flex flex-col md:flex-row md:justify-around p-5 bg-white rounded-lg shadow-custom-xl">
         {/* IMAGE */}
-        <img
-          src={pokemon.sprites.other["official-artwork"].front_default}
-          alt={pokemon.name}
-        />
+        {pokemon.sprites.other["official-artwork"].front_default ? (
+          <img
+            src={pokemon.sprites.other["official-artwork"].front_default}
+            alt={pokemon.name}
+          />
+        ) : (
+          <img
+            src={pokemon.sprites.front_default}
+            alt={pokemon.name}
+            className="w-full h-auto"
+          />
+        )}
+
         {/* HEADER */}
         <div className="flex flex-col">
           <div className="flex justify-between w-full ">
@@ -125,13 +135,21 @@ export default function PokemonProfile() {
             <React.Fragment key={pokemon.id}>
               <div className="flex flex-col items-center">
                 <Link to={`/pokemon/${pokemon.id}`}>
-                  <img
-                    className="w-20 h-20"
-                    src={
-                      pokemon.sprites.other["official-artwork"].front_default
-                    }
-                    alt={pokemon.name}
-                  />
+                  {pokemon.sprites.other["official-artwork"].front_default ? (
+                    <img
+                      className="w-20 h-20"
+                      src={
+                        pokemon.sprites.other["official-artwork"].front_default
+                      }
+                      alt={pokemon.name}
+                    />
+                  ) : (
+                    <img
+                      src={pokemon.sprites.front_default}
+                      alt={pokemon.name}
+                      className="w-full h-auto"
+                    />
+                  )}
                 </Link>
                 <div className="text-sm text-white">{pokemon.name}</div>
               </div>
