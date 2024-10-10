@@ -2,23 +2,12 @@ import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 import React, { useContext, useEffect } from "react";
 import { SearchContext } from "../context/SearchContext";
 
-export default function Input({ data }) {
-  const { searchTerm, setSearchTerm, setFilteredData } =
-    useContext(SearchContext);
+export default function Input() {
+  const { searchTerm, setSearchTerm } = useContext(SearchContext);
   const handleInputChange = (event) => {
-    // event.preventDefault();
     console.log(event.target.value);
     setSearchTerm(event.target.value);
   };
-
-  useEffect(() => {
-    if (data) {
-      const filteredData = data.filter((item) =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredData(filteredData); // Atualiza os dados filtrados no contexto
-    }
-  }, [searchTerm, data]);
 
   return (
     <div className="flex items-center gap-3 w-full">

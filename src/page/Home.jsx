@@ -17,13 +17,15 @@ export default function Home() {
   const [pokemons, setPokemons] = useState(null);
   const [allPokemons, setAllPokemons] = useState(null);
   const [pokemonsByPage, setPokemonsByPage] = useState(null);
-  const [pokemonsBySearchTerm, setPokemonsBySearchTerm] = useState(null);
+  const [pokemonsBySearchTerm, setPokemonsBySearchTerm] = useLocalStorage(
+    "filteredData",
+    []
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useLocalStorage("page", 1);
   const [totalPages, setTotalPages] = useState(0);
-  const { searchTerm, setSearchTerm, setFilteredData, filteredData } =
-    useContext(SearchContext);
+  const { searchTerm } = useContext(SearchContext);
 
   useEffect(() => {
     getAllPokemons(setAllPokemons, setLoading, setError);
@@ -55,7 +57,7 @@ export default function Home() {
       <section className="flex justify-center ">
         <div className=" container flex flex-col items-center ">
           <img src={logo2} alt={logo2} className="mb-7" />
-          <Input data={pokemons} />
+          <Input />
           <PokemonList data={pokemonsByPage} />
           <Pagination
             setCurrentPage={setCurrentPage}
