@@ -5,7 +5,6 @@ import { SearchContext } from "../context/SearchContext";
 export default function Input() {
   const { searchTerm, setSearchTerm } = useContext(SearchContext);
   const handleInputChange = (event) => {
-    console.log(event.target.value);
     setSearchTerm(event.target.value);
   };
 
