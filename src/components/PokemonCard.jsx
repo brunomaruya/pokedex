@@ -34,8 +34,8 @@ export default function PokemonCard(data) {
 
   return (
     <div className="flex justify-between w-full p-5 rounded-lg bg-white shadow-custom-xl">
-      <div className="flex flex-col gap-1">
-        <span className="float-start flex gap-1">
+      <div className="flex flex-1 flex-col gap-1">
+        <span className=" float-start flex gap-1">
           {pokemonData.types.map((type) => {
             return (
               <div
@@ -62,13 +62,21 @@ export default function PokemonCard(data) {
         </Link>
       </div>
 
-      <div>
+      <div className="flex-1">
         <span className="float-end">{idFormatter(pokemonData.id)}</span>
-        <img
-          src={pokemonData.sprites.other["official-artwork"].front_default}
-          alt={pokemonName}
-          className=""
-        />
+
+        {pokemonData.sprites.other["official-artwork"].front_default ? (
+          <img
+            src={pokemonData.sprites.other["official-artwork"].front_default}
+            alt={pokemonData.name}
+          />
+        ) : (
+          <img
+            src={pokemonData.sprites.front_default}
+            alt={pokemonData.name}
+            className="w-full h-auto"
+          />
+        )}
       </div>
     </div>
   );
