@@ -6,7 +6,8 @@ export default function Input({ data }) {
   const { searchTerm, setSearchTerm, setFilteredData } =
     useContext(SearchContext);
   const handleInputChange = (event) => {
-    event.preventDefault();
+    // event.preventDefault();
+    console.log(event.target.value);
     setSearchTerm(event.target.value);
   };
 

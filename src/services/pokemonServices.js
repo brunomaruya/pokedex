@@ -62,7 +62,6 @@ export const getPokemonsBySearchTerm = async (
     const filteredPokemons = allPokemons.filter((pokemon) =>
       pokemon.name.includes(searchTerm)
     );
-    console.log("filtered pokemons", filteredPokemons);
     setPokemonsBySearchTerm(filteredPokemons);
   } catch (error) {
     console.error("Error fetching pokemons by search term:", error);
