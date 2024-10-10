@@ -24,11 +24,7 @@ export default function PokemonProfile() {
       setLoading(true);
       try {
         const pokemonData = await getPokemon(id);
-
-        const evolutionDatas = await getPokemonEvolutionChain(id);
         setPokemon(pokemonData);
-
-        setEvolutionChain(evolutionDatas);
       } catch (error) {
         setError(error);
       } finally {
@@ -42,6 +38,10 @@ export default function PokemonProfile() {
     const fetchPokemonSpecies = async () => {
       if (!pokemon) return;
       const speciesData = await getPokemonSpecies(pokemon.species.url);
+      const evolutionDatas = await getPokemonEvolutionChain(
+        pokemon.species.url
+      );
+      setEvolutionChain(evolutionDatas);
       setSpecies(speciesData);
     };
     fetchPokemonSpecies();
