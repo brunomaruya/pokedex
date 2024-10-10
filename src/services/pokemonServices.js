@@ -1,3 +1,4 @@
+import axios from "axios";
 import axiosInstance from "./axiosInstance";
 
 export const getAllPokemons = async (setPokemons, setLoading, setError) => {
@@ -77,10 +78,10 @@ export const getPokemon = async (id) => {
     throw error;
   }
 };
-export const getPokemonSpecies = async (name) => {
-  const newName = name.split("-")[0];
+export const getPokemonSpecies = async (url) => {
   try {
-    const response = await axiosInstance.get(`pokemon-species/${newName}`);
+    if (!url) return;
+    const response = await axios.get(url);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar espécies:", error);

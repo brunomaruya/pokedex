@@ -31,7 +31,6 @@ export default function Home() {
 
   useEffect(() => {
     if (searchTerm) {
-      console.log("search term", searchTerm);
       getPokemonsBySearchTerm(allPokemons, searchTerm, setPokemonsBySearchTerm);
       getPokemonsByPage(
         pokemonsBySearchTerm,
@@ -40,7 +39,6 @@ export default function Home() {
         setTotalPages
       );
     } else {
-      console.log("no search term");
       getPokemonsByPage(
         allPokemons,
         currentPage,
@@ -49,8 +47,6 @@ export default function Home() {
       );
     }
   }, [allPokemons, currentPage, searchTerm]);
-
-  useEffect(() => {}, [searchTerm]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;

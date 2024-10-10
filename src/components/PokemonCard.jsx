@@ -17,7 +17,7 @@ export default function PokemonCard(data) {
       setLoading(true);
       try {
         const pokemonData = await getPokemon(pokemonName);
-        const speciesData = await getPokemonSpecies(pokemonData.name);
+        const speciesData = await getPokemonSpecies(pokemonData.species.url);
         setPokemonData(pokemonData);
         setSpeciesData(speciesData);
       } catch (error) {
@@ -28,10 +28,6 @@ export default function PokemonCard(data) {
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    // console.log(pokemonData, speciesData);
-  }, [pokemonData, speciesData]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;

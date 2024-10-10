@@ -24,10 +24,10 @@ export default function PokemonProfile() {
       setLoading(true);
       try {
         const pokemonData = await getPokemon(id);
-        const speciesData = await getPokemonSpecies(id);
+
         const evolutionDatas = await getPokemonEvolutionChain(id);
         setPokemon(pokemonData);
-        setSpecies(speciesData);
+
         setEvolutionChain(evolutionDatas);
       } catch (error) {
         setError(error);
@@ -37,6 +37,15 @@ export default function PokemonProfile() {
     };
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    const fetchPokemonSpecies = async () => {
+      if (!pokemon) return;
+      const speciesData = await getPokemonSpecies(pokemon.species.url);
+      setSpecies(speciesData);
+    };
+    fetchPokemonSpecies();
+  }, [pokemon]);
 
   if (loading) return <div>Loading...</div>;
 
