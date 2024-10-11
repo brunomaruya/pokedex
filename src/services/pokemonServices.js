@@ -58,6 +58,7 @@ export const getPokemonsBySearchTerm = async (
   setPokemonsBySearchTerm
 ) => {
   if (!allPokemons) return;
+
   try {
     const filteredPokemons = allPokemons.filter((pokemon) =>
       pokemon.name.includes(searchTerm)

@@ -16,7 +16,10 @@ import { SearchContext } from "../context/SearchContext";
 export default function Home() {
   const [pokemons, setPokemons] = useState(null);
   const [allPokemons, setAllPokemons] = useState(null);
-  const [pokemonsByPage, setPokemonsByPage] = useState(null);
+  const [pokemonsByPage, setPokemonsByPage] = useLocalStorage(
+    "pokemonsByPage",
+    null
+  );
   const [pokemonsBySearchTerm, setPokemonsBySearchTerm] = useLocalStorage(
     "filteredData",
     []
@@ -34,12 +37,6 @@ export default function Home() {
   useEffect(() => {
     if (searchTerm) {
       getPokemonsBySearchTerm(allPokemons, searchTerm, setPokemonsBySearchTerm);
-      getPokemonsByPage(
-        pokemonsBySearchTerm,
-        currentPage,
-        setPokemonsByPage,
-        setTotalPages
-      );
     } else {
       getPokemonsByPage(
         allPokemons,
@@ -53,6 +50,15 @@ export default function Home() {
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
+
+  useEffect(() => {
+    getPokemonsByPage(
+      pokemonsBySearchTerm,
+      currentPage,
+      setPokemonsByPage,
+      setTotalPages
+    );
+  }, [pokemonsBySearchTerm]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
