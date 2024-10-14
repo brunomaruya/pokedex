@@ -99,38 +99,6 @@ const extractEvolutionUrls = (chain) => {
   return evolutionName;
 };
 
-// export const getPokemonEvolutionChain = async (url, name) => {
-//   console.log(url);
-//   try {
-//     if (!url) return;
-
-//     const response = await axios.get(url);
-//     const evolutionChainUrl = response.data.evolution_chain.url;
-//     const evolutionChainResponse = await axiosInstance.get(evolutionChainUrl);
-
-//     // Extrai URLs dos nomes de evolução
-//     const urls = extractEvolutionUrls(evolutionChainResponse.data.chain);
-
-//     // Faz a requisição para cada URL de evolução em paralelo
-//     const evolutionDatas = await Promise.all(
-//       urls.map(async (url) => {
-//         const response = await axios.get(url);
-//         const name = response.data.name;
-//         const pokemonResponse = await axiosInstance.get(`pokemon/${name}`);
-//         return pokemonResponse.data; // Retorna os dados do Pokémon
-//       })
-//     );
-
-//     return evolutionDatas; // Retorna o array com os dados de todas as evoluções
-//   } catch (error) {
-//     const pokemonResponse = await axiosInstance.get(`pokemon/${name}`);
-//     const pokemon = [pokemonResponse.data];
-//     return pokemon; // Retorna
-//     console.error("Erro ao buscar evoluções:", error);
-//     throw error;
-//   }
-// };
-
 export const getPokemonEvolutionChain = async (url, name) => {
   try {
     if (!url) throw new Error("URL de evolução não fornecida.");
