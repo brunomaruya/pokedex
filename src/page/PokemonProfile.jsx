@@ -60,17 +60,18 @@ export default function PokemonProfile() {
           <img
             src={pokemon.sprites.other["official-artwork"].front_default}
             alt={pokemon.name}
+            className="w-full h-auto object-cover "
           />
         ) : (
           <img
             src={pokemon.sprites.front_default}
             alt={pokemon.name}
-            className="w-full h-auto"
+            className="w-full h-auto object-cover"
           />
         )}
 
         {/* HEADER */}
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-3">
           <div className="flex justify-between w-full ">
             <div>{idFormatter(pokemon.id)}</div>
             <div>

@@ -12,6 +12,7 @@ import {
 import Pagination from "../components/Pagination";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { SearchContext } from "../context/SearchContext";
+import Loading from "../components/Loading";
 
 export default function Home() {
   const [pokemons, setPokemons] = useState(null);
@@ -60,7 +61,8 @@ export default function Home() {
     );
   }, [pokemonsBySearchTerm]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading />;
+
   if (error) return <div>Error</div>;
   return (
     <div>
