@@ -53,7 +53,9 @@ export default function Home() {
   }, [currentPage]);
 
   useEffect(() => {
-    setCurrentPage(1);
+    if (searchTerm) {
+      setCurrentPage(1);
+    }
   }, [searchTerm]);
 
   useEffect(() => {
