@@ -49,6 +49,10 @@ export default function Home() {
   }, [allPokemons, currentPage, searchTerm]);
 
   useEffect(() => {
+    window.scroll(0, 0);
+  }, [currentPage]);
+
+  useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
 
