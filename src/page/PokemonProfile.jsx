@@ -48,6 +48,11 @@ export default function PokemonProfile() {
     fetchPokemonSpecies();
   }, [pokemon]);
 
+  const playPokemonSound = (pokemonSound) => {
+    const audio = new Audio(pokemonSound);
+    audio.play();
+  };
+
   if (loading) return <div>Loading...</div>;
 
   if (error) return <div>Error</div>;
@@ -74,9 +79,13 @@ export default function PokemonProfile() {
         <div className="flex flex-col gap-3">
           <div className="flex justify-between w-full ">
             <div>{idFormatter(pokemon.id)}</div>
-            <div>
+            <button
+              onClick={() => {
+                playPokemonSound(pokemon.cries.latest);
+              }}
+            >
               <SpeakerWaveIcon className="w-6 h-6" />
-            </div>
+            </button>
           </div>
           <h1 className="text-3xl font-bold">
             {capitalizeFirstLetter(pokemon.name)}
