@@ -65,13 +65,13 @@ export default function PokemonProfile() {
           <img
             src={pokemon.sprites.other["official-artwork"].front_default}
             alt={pokemon.name}
-            className="w-full h-auto object-cover "
+            className="w-full h-auto object-contain "
           />
         ) : (
           <img
             src={pokemon.sprites.front_default}
             alt={pokemon.name}
-            className="w-full h-auto object-cover"
+            className="w-full h-auto object-contain"
           />
         )}
 
