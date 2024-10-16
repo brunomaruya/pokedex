@@ -89,14 +89,49 @@ export const getPokemonSpecies = async (url) => {
   }
 };
 
-const extractEvolutionUrls = (chain) => {
+// const extractEvolutionUrls = (chain) => {
+//   console.log(chain);
+//   if (!chain) return;
+//   const evolutionUrls = [];
+//   while (chain) {
+//     evolutionUrls.push(chain.species.url);
+//     chain = chain.evolves_to[0];
+//   }
+//   return evolutionUrls;
+// };
+
+const extractEvolutionDatas = (chain) => {
   if (!chain) return;
-  const evolutionName = [];
+  const evolutionData = []; // [[{},{}],[{},{}]]
+  const secondEvolution = [];
   while (chain) {
-    evolutionName.push(chain.species.url);
-    chain = chain.evolves_to[0];
+    if (chain.length > 1) {
+      for (let i = 0; i < chain.length; i++) {
+        secondEvolution.push([
+          {
+            name: chain[i].species.name,
+            url: chain[i].species.url,
+            evolutionDetails: chain[i].evolution_details,
+          },
+        ]);
+      }
+
+      evolutionData.push(secondEvolution);
+      chain = chain.evolves_to;
+    } else {
+      evolutionData.push([
+        {
+          name: chain.species.name,
+          url: chain.species.url,
+          evolutionDetails: chain.evolution_details,
+        },
+      ]);
+
+      chain = chain.evolves_to[0];
+    }
   }
-  return evolutionName;
+
+  return evolutionData;
 };
 
 export const getPokemonEvolutionChain = async (url, name) => {
@@ -111,13 +146,14 @@ export const getPokemonEvolutionChain = async (url, name) => {
       throw new Error("URL da cadeia de evolução não encontrada.");
 
     // Requisição da cadeia de evolução
-    const evolutionChainResponse = await axiosInstance.get(evolutionChainUrl);
+    const evolutionChainResponse = await axios.get(evolutionChainUrl);
 
     // Extrai URLs dos Pokémon da cadeia de evolução
-    const urls = extractEvolutionUrls(evolutionChainResponse.data.chain);
-
+    const datas = extractEvolutionDatas(evolutionChainResponse.data.chain);
+    console.log(datas);
     // Função para obter dados de um Pokémon com verificação de erros
-    const fetchPokemonData = async (url) => {
+    const fetchPokemonData = async (data) => {
+      const url = data[1]?.url;
       try {
         const response = await axios.get(url);
         const pokemonName = response.data?.name;
@@ -134,7 +170,7 @@ export const getPokemonEvolutionChain = async (url, name) => {
     };
 
     // Faz as requisições para todas as evoluções em paralelo
-    const evolutionDatas = await Promise.all(urls.map(fetchPokemonData));
+    const evolutionDatas = await Promise.all(datas.map(fetchPokemonData));
 
     return evolutionDatas; // Retorna os dados das evoluções
   } catch (error) {
