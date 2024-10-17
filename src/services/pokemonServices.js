@@ -101,17 +101,29 @@ const extractEvolutionDatas = (chain) => {
     securityCounter++;
     if (chain.length > 1) {
       for (let i = 0; i < chain.length; i++) {
-        nextEvolution.push([{ name: chain[i].species.name }]);
+        nextEvolution.push([
+          {
+            name: chain[i].species.name,
+            pokemonSpeciesUrl: chain[i].species.url,
+            evolutionDetails: chain[i].evolution_details,
+          },
+        ]);
       }
       evolutionData.push(nextEvolution);
-      console.log(evolutionData);
+
       break;
     }
 
-    evolutionData.push([{ name: chain[0].species.name }]);
+    evolutionData.push([
+      {
+        name: chain[0].species.name,
+        pokemonSpeciesUrl: chain[0].species.url,
+        evolutionDetails: chain[0].evolution_details,
+      },
+    ]);
     chain = chain[0].evolves_to;
   }
-  console.log(evolutionData);
+
   return evolutionData;
 };
 
@@ -134,7 +146,38 @@ export const getPokemonEvolutionChain = async (url, name) => {
 
     // Função para obter dados de um Pokémon com verificação de erros
     const fetchPokemonData = async (data) => {
-      const url = data[1]?.url;
+      console.log(data);
+
+      if (data.length > 1) {
+        let nextEvolution = [];
+        for (let i = 0; i < data.length; i++) {
+          const url = data[i][0]?.pokemonSpeciesUrl;
+
+          try {
+            const response = await axios.get(url);
+            const pokemonName = response.data?.name;
+            const pokemonResponse = await axiosInstance.get(
+              `pokemon/${pokemonName}`
+            );
+
+            nextEvolution.push({
+              pokemon: pokemonResponse.data,
+              evolutionDetails: data[0]?.evolutionDetails,
+            });
+            console.log(nextEvolution);
+          } catch (err) {
+            console.error(
+              `Erro ao buscar dados do Pokémon da URL: ${url}`,
+              err
+            );
+            throw err;
+          }
+        }
+        console.log(nextEvolution);
+        return nextEvolution;
+      }
+
+      const url = data[0]?.pokemonSpeciesUrl;
       try {
         const response = await axios.get(url);
         const pokemonName = response.data?.name;
@@ -143,7 +186,10 @@ export const getPokemonEvolutionChain = async (url, name) => {
         const pokemonResponse = await axiosInstance.get(
           `pokemon/${pokemonName}`
         );
-        return pokemonResponse.data;
+        return {
+          pokemon: pokemonResponse.data,
+          evolutionDetails: data[0]?.evolutionDetails,
+        };
       } catch (err) {
         console.error(`Erro ao buscar dados do Pokémon da URL: ${url}`, err);
         throw err;
@@ -153,6 +199,7 @@ export const getPokemonEvolutionChain = async (url, name) => {
     // Faz as requisições para todas as evoluções em paralelo
     const evolutionDatas = await Promise.all(datas.map(fetchPokemonData));
 
+    console.log(evolutionDatas);
     return evolutionDatas; // Retorna os dados das evoluções
   } catch (error) {
     console.error("Erro ao buscar a cadeia de evolução:", error);
