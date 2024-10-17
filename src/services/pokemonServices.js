@@ -89,48 +89,29 @@ export const getPokemonSpecies = async (url) => {
   }
 };
 
-// const extractEvolutionUrls = (chain) => {
-//   console.log(chain);
-//   if (!chain) return;
-//   const evolutionUrls = [];
-//   while (chain) {
-//     evolutionUrls.push(chain.species.url);
-//     chain = chain.evolves_to[0];
-//   }
-//   return evolutionUrls;
-// };
-
 const extractEvolutionDatas = (chain) => {
+  let securityCounter = 0;
   if (!chain) return;
+  chain = [chain];
+
   const evolutionData = []; // [[{},{}],[{},{}]]
-  const secondEvolution = [];
-  while (chain) {
+  const nextEvolution = [];
+  while (chain.length > 0) {
+    if (securityCounter > 10) break;
+    securityCounter++;
     if (chain.length > 1) {
       for (let i = 0; i < chain.length; i++) {
-        secondEvolution.push([
-          {
-            name: chain[i].species.name,
-            url: chain[i].species.url,
-            evolutionDetails: chain[i].evolution_details,
-          },
-        ]);
+        nextEvolution.push([{ name: chain[i].species.name }]);
       }
-
-      evolutionData.push(secondEvolution);
-      chain = chain.evolves_to;
-    } else {
-      evolutionData.push([
-        {
-          name: chain.species.name,
-          url: chain.species.url,
-          evolutionDetails: chain.evolution_details,
-        },
-      ]);
-
-      chain = chain.evolves_to[0];
+      evolutionData.push(nextEvolution);
+      console.log(evolutionData);
+      break;
     }
-  }
 
+    evolutionData.push([{ name: chain[0].species.name }]);
+    chain = chain[0].evolves_to;
+  }
+  console.log(evolutionData);
   return evolutionData;
 };
 
@@ -150,7 +131,7 @@ export const getPokemonEvolutionChain = async (url, name) => {
 
     // Extrai URLs dos Pokémon da cadeia de evolução
     const datas = extractEvolutionDatas(evolutionChainResponse.data.chain);
-    console.log(datas);
+
     // Função para obter dados de um Pokémon com verificação de erros
     const fetchPokemonData = async (data) => {
       const url = data[1]?.url;
