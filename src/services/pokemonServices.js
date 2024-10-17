@@ -146,8 +146,6 @@ export const getPokemonEvolutionChain = async (url, name) => {
 
     // Função para obter dados de um Pokémon com verificação de erros
     const fetchPokemonData = async (data) => {
-      console.log(data);
-
       if (data.length > 1) {
         let nextEvolution = [];
         for (let i = 0; i < data.length; i++) {
@@ -162,9 +160,8 @@ export const getPokemonEvolutionChain = async (url, name) => {
 
             nextEvolution.push({
               pokemon: pokemonResponse.data,
-              evolutionDetails: data[0]?.evolutionDetails,
+              evolutionDetails: data[i][0]?.evolutionDetails,
             });
-            console.log(nextEvolution);
           } catch (err) {
             console.error(
               `Erro ao buscar dados do Pokémon da URL: ${url}`,
@@ -173,7 +170,7 @@ export const getPokemonEvolutionChain = async (url, name) => {
             throw err;
           }
         }
-        console.log(nextEvolution);
+
         return nextEvolution;
       }
 
@@ -199,7 +196,6 @@ export const getPokemonEvolutionChain = async (url, name) => {
     // Faz as requisições para todas as evoluções em paralelo
     const evolutionDatas = await Promise.all(datas.map(fetchPokemonData));
 
-    console.log(evolutionDatas);
     return evolutionDatas; // Retorna os dados das evoluções
   } catch (error) {
     console.error("Erro ao buscar a cadeia de evolução:", error);

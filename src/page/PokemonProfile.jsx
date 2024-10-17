@@ -142,9 +142,39 @@ export default function PokemonProfile() {
 
         <div className="flex justify-around items-center">
           {evolutionChain.map((pokemon, index) => (
-            <React.Fragment key={pokemon.pokemon.id}>
+            <React.Fragment key={index}>
               {pokemon.length > 1 ? (
-                <span className="mx-2 text-2xl">Mais que um</span>
+                <span className="mx-2 text-2xl">
+                  {pokemon.map((pokemon) => {
+                    return (
+                      <div className="flex flex-col items-center">
+                        <Link to={`/pokemon/${pokemon.pokemon.id}`}>
+                          {pokemon.pokemon.sprites.other["official-artwork"]
+                            .front_default ? (
+                            <img
+                              className="w-20 h-20"
+                              src={
+                                pokemon.pokemon.sprites.other[
+                                  "official-artwork"
+                                ].front_default
+                              }
+                              alt={pokemon.pokemon.name}
+                            />
+                          ) : (
+                            <img
+                              src={pokemon.pokemon.sprites.front_default}
+                              alt={pokemon.pokemon.name}
+                              className="w-full h-auto"
+                            />
+                          )}
+                        </Link>
+                        <div className="text-sm text-white">
+                          {pokemon.pokemon.name}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </span>
               ) : (
                 <div className="flex flex-col items-center">
                   <Link to={`/pokemon/${pokemon.pokemon.id}`}>
