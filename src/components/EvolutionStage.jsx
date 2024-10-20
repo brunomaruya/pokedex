@@ -1,11 +1,34 @@
+import { ArrowRightIcon } from "@heroicons/react/16/solid";
 import React from "react";
 import { Link } from "react-router-dom";
 
-function EvolutionDetails(pokemon) {
-  console.log(pokemon);
+function Arrow(index, pokemon, evolutionChain) {
   return (
-    <div>
-      <div className="flex flex-col items-center">
+    <>
+      {pokemon.evolutionDetails.length > 0 && (
+        <span className="mx-2 text-2xl">
+          <ArrowRightIcon className="h-6 w-6 text-white" />
+          <div className="text-white">
+            {pokemon.evolutionDetails.length > 0 && (
+              <div>
+                {
+                  pokemon.evolutionDetails[pokemon.evolutionDetails.length - 1]
+                    .min_level
+                }
+              </div>
+            )}
+          </div>
+        </span> // Aumenta o tamanho da seta
+      )}
+    </>
+  );
+}
+
+function EvolutionDetails(pokemon) {
+  return (
+    <React.Fragment>
+      {Arrow(pokemon.index, pokemon, pokemon.evolutionChain)}
+      <div className="flex flex-col items-center ">
         <Link to={`/pokemon/${pokemon.pokemon.id}`}>
           {pokemon.pokemon.sprites.other["official-artwork"].front_default ? (
             <img
@@ -25,7 +48,7 @@ function EvolutionDetails(pokemon) {
         </Link>
         <div className="text-sm text-white">{pokemon.pokemon.name}</div>
       </div>
-    </div>
+    </React.Fragment>
   );
 }
 
@@ -33,11 +56,11 @@ export default function EvolutionStage({ pokemon }) {
   return (
     <>
       {pokemon.length > 1 ? (
-        <span className="mx-2 text-2xl">
+        <div className="mx-2 text-2xl grid grid-cols-2  items-center">
           {pokemon.map((pokemon) => {
             return EvolutionDetails(pokemon);
           })}
-        </span>
+        </div>
       ) : (
         EvolutionDetails(pokemon)
       )}

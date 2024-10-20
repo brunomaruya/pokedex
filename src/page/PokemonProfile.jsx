@@ -140,30 +140,9 @@ export default function PokemonProfile() {
       {/* EVOLUTION CHAIN  */}
       <section>
         <h2 className="text-2xl font-bold text-white ml-5">Evolution </h2>
-
-        <div className="flex justify-around items-center">
+        <div className="flex justify-center gap-5 items-center  ">
           {evolutionChain.map((pokemon, index) => (
-            <React.Fragment key={index}>
-              {/* Renderize a seta apenas se não for o último Pokémon */}
-
-              {index > 0 && index < evolutionChain.length + 1 && (
-                <span className="mx-2 text-2xl">
-                  <div className="text-white">
-                    {pokemon.evolutionDetails.length > 0 && (
-                      <div>
-                        {
-                          pokemon.evolutionDetails[
-                            pokemon.evolutionDetails.length - 1
-                          ].min_level
-                        }
-                      </div>
-                    )}
-                  </div>
-                  <ArrowRightIcon className="h-6 w-6 text-white" />
-                </span> // Aumenta o tamanho da seta
-              )}
-              <EvolutionStage pokemon={pokemon} />
-            </React.Fragment>
+            <EvolutionStage pokemon={pokemon} key={index} />
           ))}
         </div>
       </section>
