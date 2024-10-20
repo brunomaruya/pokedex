@@ -6,15 +6,25 @@ function Arrow(index, pokemon, evolutionChain) {
   return (
     <>
       {pokemon.evolutionDetails.length > 0 && (
-        <span className="mx-2 text-2xl">
+        <span className="mx-2 text-2xl flex flex-col items-center">
           <ArrowRightIcon className="h-6 w-6 text-white" />
           <div className="text-white">
+            {console.log(pokemon.evolutionDetails)}
             {pokemon.evolutionDetails.length > 0 && (
-              <div>
-                {
+              <div className="text-sm">
+                {/* LEVEL CASE */}
+                {pokemon.evolutionDetails[pokemon.evolutionDetails.length - 1]
+                  .min_level &&
+                  "Lvl " +
+                    pokemon.evolutionDetails[
+                      pokemon.evolutionDetails.length - 1
+                    ].min_level}
+
+                {/* STONE CASE */}
+                {pokemon.evolutionDetails[pokemon.evolutionDetails.length - 1]
+                  .item &&
                   pokemon.evolutionDetails[pokemon.evolutionDetails.length - 1]
-                    .min_level
-                }
+                    .item.name}
               </div>
             )}
           </div>
