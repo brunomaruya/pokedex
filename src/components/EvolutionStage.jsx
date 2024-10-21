@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Arrow(index, pokemon, evolutionChain) {
+  console.log(pokemon);
   return (
     <>
       {pokemon.evolutionDetails.length > 0 && (
@@ -25,6 +26,9 @@ function Arrow(index, pokemon, evolutionChain) {
                   .item &&
                   pokemon.evolutionDetails[pokemon.evolutionDetails.length - 1]
                     .item.name}
+
+                {pokemon.evolutionDetails[pokemon.evolutionDetails.length - 1]
+                  .trigger.name == "trade" && "Trade"}
               </div>
             )}
           </div>
