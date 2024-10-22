@@ -22,30 +22,28 @@ function Arrow(pokemon) {
 }
 
 function EvolutionDetails(pokemon) {
+  const pokemonData = pokemon.pokemon;
+  const pokemonSprites = pokemonData.sprites;
+  const officialArtwork = pokemonSprites.other["official-artwork"];
   return (
-    <React.Fragment>
+    <>
       {Arrow(pokemon)}
-      <div className="flex flex-col items-center ">
-        <Link to={`/pokemon/${pokemon.pokemon.id}`}>
-          {pokemon.pokemon.sprites.other["official-artwork"].front_default ? (
-            <img
-              className="w-20 h-20"
-              src={
-                pokemon.pokemon.sprites.other["official-artwork"].front_default
-              }
-              alt={pokemon.pokemon.name}
-            />
-          ) : (
-            <img
-              src={pokemon.pokemon.sprites.front_default}
-              alt={pokemon.pokemon.name}
-              className="w-full h-auto"
-            />
-          )}
-        </Link>
-        <div className="text-sm text-white">{pokemon.pokemon.name}</div>
-      </div>
-    </React.Fragment>
+      <Link
+        className="flex flex-col items-center "
+        to={`/pokemon/${pokemonData.id}`}
+      >
+        <img
+          src={
+            officialArtwork.front_default
+              ? officialArtwork.front_default
+              : pokemonSprites.front_default
+          }
+          alt={pokemonData.name}
+          className="w-20 h-20"
+        />
+        <div className="text-sm text-white">{pokemonData.name}</div>
+      </Link>
+    </>
   );
 }
 
