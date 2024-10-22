@@ -177,12 +177,10 @@ export const getPokemonEvolutionChain = async (url, name) => {
       const url = data[0]?.pokemonSpeciesUrl;
       try {
         const response = await axios.get(url);
-        const pokemonName = response.data?.name;
-        if (!pokemonName) throw new Error("Nome do Pokémon não encontrado.");
+        const pokemonId = response.data?.id;
+        if (!pokemonId) throw new Error("Nome do Pokémon não encontrado.");
 
-        const pokemonResponse = await axiosInstance.get(
-          `pokemon/${pokemonName}`
-        );
+        const pokemonResponse = await axiosInstance.get(`pokemon/${pokemonId}`);
         return {
           pokemon: pokemonResponse.data,
           evolutionDetails: data[0]?.evolutionDetails,

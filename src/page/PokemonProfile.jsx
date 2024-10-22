@@ -50,7 +50,7 @@ export default function PokemonProfile() {
   if (loading) return <div>Loading...</div>;
 
   if (error) return <div>Error</div>;
-
+  console.log(pokemon);
   return (
     <main className="container max-w-[1024px] mx-auto mb-20">
       <section className="container flex flex-col md:flex-row md:justify-around p-5 bg-white rounded-lg shadow-custom-xl">
