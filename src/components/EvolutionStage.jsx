@@ -2,37 +2,20 @@ import { ArrowRightIcon } from "@heroicons/react/16/solid";
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Arrow(index, pokemon, evolutionChain) {
-  console.log(pokemon);
+function Arrow(pokemon) {
+  const evolutionDetails =
+    pokemon.evolutionDetails[pokemon.evolutionDetails.length - 1];
   return (
     <>
       {pokemon.evolutionDetails.length > 0 && (
         <span className="mx-2 text-2xl flex flex-col items-center">
           <ArrowRightIcon className="h-6 w-6 text-white" />
-          <div className="text-white">
-            {console.log(pokemon.evolutionDetails)}
-            {pokemon.evolutionDetails.length > 0 && (
-              <div className="text-sm">
-                {/* LEVEL CASE */}
-                {pokemon.evolutionDetails[pokemon.evolutionDetails.length - 1]
-                  .min_level &&
-                  "Lvl " +
-                    pokemon.evolutionDetails[
-                      pokemon.evolutionDetails.length - 1
-                    ].min_level}
-
-                {/* STONE CASE */}
-                {pokemon.evolutionDetails[pokemon.evolutionDetails.length - 1]
-                  .item &&
-                  pokemon.evolutionDetails[pokemon.evolutionDetails.length - 1]
-                    .item.name}
-
-                {pokemon.evolutionDetails[pokemon.evolutionDetails.length - 1]
-                  .trigger.name == "trade" && "Trade"}
-              </div>
-            )}
+          <div className="text-white text-sm">
+            {evolutionDetails.min_level && "Lvl " + evolutionDetails.min_level}
+            {evolutionDetails.item && evolutionDetails.item.name}
+            {evolutionDetails.trigger.name == "trade" && "Trade"}
           </div>
-        </span> // Aumenta o tamanho da seta
+        </span>
       )}
     </>
   );
@@ -41,7 +24,7 @@ function Arrow(index, pokemon, evolutionChain) {
 function EvolutionDetails(pokemon) {
   return (
     <React.Fragment>
-      {Arrow(pokemon.index, pokemon, pokemon.evolutionChain)}
+      {Arrow(pokemon)}
       <div className="flex flex-col items-center ">
         <Link to={`/pokemon/${pokemon.pokemon.id}`}>
           {pokemon.pokemon.sprites.other["official-artwork"].front_default ? (
