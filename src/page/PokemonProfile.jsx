@@ -1,9 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { idFormatter } from "../utils/idFormatter";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
-import { ArrowRightIcon, SpeakerWaveIcon } from "@heroicons/react/16/solid";
+import { SpeakerWaveIcon } from "@heroicons/react/16/solid";
 import InfoCard from "../components/InfoCard";
 import {
   getPokemon,
@@ -11,6 +10,7 @@ import {
   getPokemonSpecies,
 } from "../services/pokemonServices";
 import EvolutionStage from "../components/EvolutionStage";
+import { fetchData } from "../utils/fetchData";
 
 export default function PokemonProfile() {
   const [pokemon, setPokemon] = useState(null);
@@ -21,32 +21,25 @@ export default function PokemonProfile() {
   const { id } = useParams();
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const pokemonData = await getPokemon(id);
-        setPokemon(pokemonData);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    fetchData(() => getPokemon(id), setLoading, setPokemon, setError);
   }, [id]);
 
   useEffect(() => {
-    const fetchPokemonSpecies = async () => {
-      if (!pokemon) return;
-      const speciesData = await getPokemonSpecies(pokemon.species.url);
-      const evolutionDatas = await getPokemonEvolutionChain(
-        pokemon.species.url,
-        pokemon.name
-      );
-      setEvolutionChain(evolutionDatas);
-      setSpecies(speciesData);
-    };
-    fetchPokemonSpecies();
+    if (!pokemon) return;
+    const species = pokemon.species.url;
+
+    fetchData(
+      () => getPokemonSpecies(species),
+      setLoading,
+      setSpecies,
+      setError
+    );
+    fetchData(
+      () => getPokemonEvolutionChain(species, pokemon.name),
+      setLoading,
+      setEvolutionChain,
+      setError
+    );
   }, [pokemon]);
 
   const playPokemonSound = (pokemonSound) => {
