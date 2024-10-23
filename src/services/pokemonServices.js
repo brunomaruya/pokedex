@@ -85,15 +85,12 @@ export const getPokemonSpecies = async (url) => {
 };
 
 const extractEvolutionDatas = (chain) => {
-  let securityCounter = 0;
   if (!chain) return;
   chain = [chain];
 
-  const evolutionData = []; // [[{},{}],[{},{}]]
+  const evolutionData = [];
   const nextEvolution = [];
   while (chain.length > 0) {
-    if (securityCounter > 10) break;
-    securityCounter++;
     if (chain.length > 1) {
       for (let i = 0; i < chain.length; i++) {
         nextEvolution.push([
@@ -105,7 +102,6 @@ const extractEvolutionDatas = (chain) => {
         ]);
       }
       evolutionData.push(nextEvolution);
-
       break;
     }
 
@@ -124,22 +120,13 @@ const extractEvolutionDatas = (chain) => {
 
 export const getPokemonEvolutionChain = async (url, name) => {
   try {
-    if (!url) throw new Error("URL de evolução não fornecida.");
-
-    // Faz a requisição para a URL de evolução
+    if (!url) return;
     const response = await axios.get(url);
     const evolutionChainUrl = response.data?.evolution_chain?.url;
-
-    if (!evolutionChainUrl)
-      throw new Error("URL da cadeia de evolução não encontrada.");
-
-    // Requisição da cadeia de evolução
+    if (!evolutionChainUrl) return;
     const evolutionChainResponse = await axios.get(evolutionChainUrl);
-
-    // Extrai URLs dos Pokémon da cadeia de evolução
     const datas = extractEvolutionDatas(evolutionChainResponse.data.chain);
 
-    // Função para obter dados de um Pokémon com verificação de erros
     const fetchPokemonData = async (data) => {
       if (data.length > 1) {
         let nextEvolution = [];
@@ -186,20 +173,18 @@ export const getPokemonEvolutionChain = async (url, name) => {
       }
     };
 
-    // Faz as requisições para todas as evoluções em paralelo
     const evolutionDatas = await Promise.all(datas.map(fetchPokemonData));
 
-    return evolutionDatas; // Retorna os dados das evoluções
+    return evolutionDatas;
   } catch (error) {
     console.error("Erro ao buscar a cadeia de evolução:", error);
 
-    // Caso ocorra erro, tenta buscar o Pokémon original
     try {
       const pokemonResponse = await axiosInstance.get(`pokemon/${name}`);
-      return [pokemonResponse.data]; // Retorna dados do Pokémon original como fallback
+      return [pokemonResponse.data];
     } catch (fallbackError) {
       console.error("Erro ao buscar Pokémon original:", fallbackError);
-      throw fallbackError; // Repassa o erro
+      throw fallbackError;
     }
   }
 };
