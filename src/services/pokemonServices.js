@@ -53,6 +53,7 @@ export const getPokemonsBySearchTerm = async (
   setPokemonsBySearchTerm
 ) => {
   if (!allPokemons) return;
+  searchTerm = searchTerm.toLowerCase();
 
   try {
     const filteredPokemons = allPokemons.filter((pokemon) =>

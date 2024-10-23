@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <Link to="/">
       <header className="mb-20">
-        <img src={logo} alt={logo} />
+        <img src={logo} alt={logo} className="drop-shadow-2xl" />
       </header>
     </Link>
   );
