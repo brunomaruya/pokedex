@@ -7,25 +7,22 @@ export const getAllPokemons = async (setPokemons, setLoading, setError) => {
     let allPokemons = [];
     let offset = 0;
     let fetching = true;
-
     while (fetching) {
       const response = await axiosInstance.get(
         `pokemon?limit=${limit}&offset=${offset}`
       );
-      allPokemons = allPokemons.concat(response.data.results);
-      if (response.data.results.length < limit) {
-        fetching = false; // Não há mais Pokémon para buscar
-      }
-      offset += limit; // Aumenta o offset para a próxima página
+      const results = response.data.results;
+      allPokemons = allPokemons.concat(results);
+      offset += limit;
+      if (results.length < limit) fetching = false;
     }
-
-    setPokemons(allPokemons); // Atualiza o estado com todos os Pokémon
-    setLoading(false);
+    setPokemons(allPokemons);
   } catch (error) {
     console.error("Error fetching all pokemons:", error);
     setError(error);
+    throw error;
+  } finally {
     setLoading(false);
-    throw error; // Opcional: você pode lançar o erro para tratá-lo em outro lugar
   }
 };
 
@@ -38,15 +35,13 @@ export const getPokemonsByPage = async (
   if (!allPokemons) return;
 
   try {
-    if (allPokemons) {
-      const itemsPerPage = 48;
-      const indexOfLastItem = currentPage * itemsPerPage; //ex: 1 * 48 = 48; ex: 2 * 48 = 96
-      const indexOfFirstItem = indexOfLastItem - itemsPerPage; //ex: 48 - 48 = 0; ex: 96 - 48 = 48
-      const currentItems = allPokemons.slice(indexOfFirstItem, indexOfLastItem);
-      const totalPages = Math.ceil(allPokemons.length / itemsPerPage);
-      setTotalPages(totalPages);
-      setPokemonsByPage(currentItems);
-    }
+    const itemsPerPage = 48;
+    const indexOfLastItem = currentPage * itemsPerPage; //ex: 1 * 48 = 48; ex: 2 * 48 = 96
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage; //ex: 48 - 48 = 0; ex: 96 - 48 = 48
+    const currentItems = allPokemons.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(allPokemons.length / itemsPerPage);
+    setTotalPages(totalPages);
+    setPokemonsByPage(currentItems);
   } catch (error) {
     console.log("Error fetching pokemons by page: " + error.message);
   }
